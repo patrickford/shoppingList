@@ -8,7 +8,16 @@ var Storage = {
     this.items.push(item);
     this.setId += 1;
     return item;
-  } 
+  }, 
+
+  delete: function(id) {
+    for (var i = 0; i < this.items.length; i++) {
+      if (this.items[i].id == id) {
+        return this.items.splice(i, 1)
+      }
+    }
+    return 'error'; 
+  }
 };
 
 var createStorage = function() {
@@ -39,4 +48,13 @@ app.post('/items', jsonParser, function(request, response) {
     var item = storage.add(request.body.name);
     response.status(201).json(item);
 });
+
+app.delete('/items/:id', function(request, response) {
+    var item = storage.delete(request.params.id); 
+    if (item == 'error') {
+      response.sendStatus(404); 
+    }
+    response.status(200).json(item);  
+});
+
 app.listen(process.env.PORT || 8080, process.env.IP);
