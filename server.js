@@ -19,12 +19,14 @@ var Storage = {
     return 'error'; 
   },
 
-  post: function(id) {
+  update: function(id, name) {
     for (var i = 0; i < this.items.length; i++) {
       if (this.items[i].id == id) {
-        return this.items.splice(i, 0)//keep working to edit location of item 
+        this.items[i].name = name; 
+        return this.items[i]; 
       }
     }
+    return this.add(name);
   }
 };
 
@@ -65,11 +67,11 @@ app.delete('/items/:id', function(request, response) {
   response.status(200).json(item);  
 });
 
-app.post('items/:id', function(request, response) {
-  var item = storage.post(request.params.id);
-  if (item == 'error') {
-    response.sendStatus(404); 
+app.put('items/:id', jsonParser, function(request, response) {
+  if (!('name' in request.body)) {
+    return response.sendStatus(400); 
   }
+  var item = storage.update(request.params.id, request.body.name)
   response.status(200).json(item); 
 });
 
