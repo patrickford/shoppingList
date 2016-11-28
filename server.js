@@ -67,12 +67,12 @@ app.delete('/items/:id', function(request, response) {
   response.status(200).json(item);  
 });
 
-app.put('items/:id', jsonParser, function(request, response) {
+app.put('/items/:id', jsonParser, function(request, response) {
   if (!('name' || 'id' in request.body)) {
     return response.sendStatus(400); 
   }
   var item = storage.update(request.params.id, request.body.name)
-  response.status(200).json(item); 
+  response.status(200).json(item);
 });
 
 app.listen(process.env.PORT || 8080, process.env.IP);
