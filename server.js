@@ -17,6 +17,14 @@ var Storage = {
       }
     }
     return 'error'; 
+  },
+
+  post: function(id) {
+    for (var i = 0; i < this.items.length; i++) {
+      if (this.items[i].id == id) {
+        return this.items.splice(i, 0)//keep working to edit location of item 
+      }
+    }
   }
 };
 
@@ -37,24 +45,32 @@ var app = express();
 app.use(express.static('public'));
 
 app.get('/items', function(request, response) {
-    response.json(storage.items);
+  response.json(storage.items);
 });
 
 app.post('/items', jsonParser, function(request, response) {
-    if (!('name' in request.body)) {
-        return response.sendStatus(400);
-    }
+  if (!('name' in request.body)) {
+      return response.sendStatus(400);
+  }
 
-    var item = storage.add(request.body.name);
-    response.status(201).json(item);
+  var item = storage.add(request.body.name);
+  response.status(201).json(item);
 });
 
 app.delete('/items/:id', function(request, response) {
-    var item = storage.delete(request.params.id); 
-    if (item == 'error') {
-      response.sendStatus(404); 
-    }
-    response.status(200).json(item);  
+  var item = storage.delete(request.params.id); 
+  if (item == 'error') {
+    response.sendStatus(404); 
+  }
+  response.status(200).json(item);  
+});
+
+app.post('items/:id', function(request, response) {
+  var item = storage.post(request.params.id);
+  if (item == 'error') {
+    response.sendStatus(404); 
+  }
+  response.status(200).json(item); 
 });
 
 app.listen(process.env.PORT || 8080, process.env.IP);
