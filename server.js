@@ -3,11 +3,14 @@ var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
 
 var Storage = {
-  add: function(name) {
-    var item = {name: name, id: this.setId};
-    this.items.push(item);
+  add: function(user, name) {
+    var user = [
+      this.username = user, 
+      this.item = {name: name, id: storage.setId},
+    ];
+    this.items.push(user.item);
     this.setId += 1;
-    return item;
+    return user.item;
   }, 
 
   delete: function(id) {
@@ -39,7 +42,7 @@ var createStorage = function() {
 
 var storage = createStorage();
 
-storage.add('Broad beans');
+storage.add('Joe', 'Broad beans');
 storage.add('Tomatoes');
 storage.add('Peppers');
 
@@ -51,7 +54,7 @@ app.get('/items', function(request, response) {
 });
 
 app.get('/users/:username', function(request, response) {
-  response.json(storage.username.items)
+  response.json(storage.user.items)
 });
 
 app.post('/items', jsonParser, function(request, response) {
