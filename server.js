@@ -50,6 +50,10 @@ app.get('/items', function(request, response) {
   response.json(storage.items);
 });
 
+app.get('/users/:username', function(request, response) {
+  response.json(storage.username.items)
+});
+
 app.post('/items', jsonParser, function(request, response) {
   if (!('name' in request.body)) {
       return response.sendStatus(400);
@@ -76,3 +80,5 @@ app.put('/items/:id', jsonParser, function(request, response) {
 });
 
 app.listen(process.env.PORT || 8080, process.env.IP);
+
+console.log('listening on localhost: port 8080');
